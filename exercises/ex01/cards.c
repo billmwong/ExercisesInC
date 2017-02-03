@@ -46,13 +46,14 @@ int main()
   char card_name[3];
   int count = 0;
   while (card_name[0] != 'X') {
+    int val;
     puts("Enter the card_name: ");
     scanf("%2s", card_name);
     if (card_name[0] == 'X') {
       continue;
     }
 
-    int val = get_card_val(card_name);
+    val = get_card_val(card_name);
 
     if ((val < 1) || ((val > 10) && (card_name[0] != 'A'))) {
       puts("I don't understand that value!");
