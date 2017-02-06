@@ -7,6 +7,7 @@ Modified version of an example from Chapter 2.5 of Head First C.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <regex.h>
 
 #define NUM_TRACKS 5
 
@@ -17,6 +18,7 @@ char tracks[][80] = {
     "All Blues",
     "Flamenco Sketches"
 };
+regex_t re;
 
 
 // Finds all tracks that contain the given string.
@@ -26,9 +28,9 @@ void find_track(char search_for[])
 {
     int i;
     for (i=0; i<NUM_TRACKS; i++) {
-	if (strstr(tracks[i], search_for)) {
-	    printf("Track %i: '%s'\n", i, tracks[i]);
-	}
+        if (strstr(tracks[i], search_for)) {
+            printf("Track %i: '%s'\n", i, tracks[i]);
+        }
     }
 }
 
@@ -37,7 +39,24 @@ void find_track(char search_for[])
 // Prints track number and title.
 void find_track_regex(char pattern[])
 {
-    // TODO: fill this in
+    int status;
+    int i;
+
+    // Compile Regex
+    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) {
+        printf("Could not compile regex\n");
+        return;
+    }
+
+    // Find match for each track
+    for (i=0; i<NUM_TRACKS; i++) {
+        if (!regexec(&re, tracks[i], 0, NULL, 0)) {
+            printf("Track %i: '%s'\n", i, tracks[i]);
+        }
+    }
+
+    // Free memory
+    regfree(&re);
 }
 
 // Truncates the string at the first newline, if there is one.
@@ -58,8 +77,8 @@ int main (int argc, char *argv[])
     fgets(search_for, 80, stdin);
     rstrip(search_for);
 
-    find_track(search_for);
-    //find_track_regex(search_for);
+    // find_track(search_for);
+    find_track_regex(search_for);
 
     return 0;
 }
