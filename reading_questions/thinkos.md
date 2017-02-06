@@ -42,14 +42,23 @@ This error happens when you try to read or write an incorrect location in memory
 
 1) Give a real-world example of virtualization (ideally not one of the ones in the book).
 
+When we use GPS to figure out our location, we are virtually connecting to any signal and that signal knows our location.  In reality, our phone is connecting to different GPS towers which are triangulating our distance from each tower.
+
 2) What is the difference between a program and a process?
+
+A program runs in processes. They allow each program to run isolated from other programs.
 
 3) What is the primary purpose of the process abstraction?  What illusion does the process abstraction create?
 
+It creates the illusion that each program is running on its own machine, which prevents accessing the memory of another program.
+
 4) What is the kernel?
+
+The part of the OS responsible for making threads.
 
 5) What is a daemon?
  
+A background process that is usually part of the OS.
 
 ## Chapter 3
 
