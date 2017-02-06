@@ -9,3 +9,5 @@ This sprint I did [TOS chapters 1 and 2](../reading_questions/thinkos.md).
 What does code optimization do, and what are the main advantages and disadvantages of it?
 
 Code opimization is a step during compilation of code that can make the program faster or use less space.  Advantages are that your program can run faster if speed is important, and it can be less memory-heavy if space is important.  Disadvantages are that compiling takes longer, and it can make it harder to debug your code.
+
+Source: Think OS Chapter 1
