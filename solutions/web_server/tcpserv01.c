@@ -2,7 +2,11 @@
 
 char *reply = "HTTP/1.0 200 OK\r\n"
     "\r\n"
-    "<body>1111</body>\r\n"
+    "<body><h1>Hello World!</h1></body>\r\n"
+    "\r\n";
+char *replyBill = "HTTP/1.0 200 OK\r\n"
+    "\r\n"
+    "<body><h1>Hello Bill!</h1></body>\r\n"
     "\r\n";
 
 int main(int argc, char **argv)
@@ -24,18 +28,19 @@ int main(int argc, char **argv)
     Listen(listenfd, LISTENQ);
     printf("Listening on port %d\n", servaddr.sin_port);
 
+    // Keep looping and listening
     for ( ; ; ) {
-	clilen = sizeof(cliaddr);
-	connfd = Accept(listenfd, (SA *) &cliaddr, &clilen);
-	printf("Accepted\n");
-	
-	if ( (childpid = Fork()) == 0) {
-	    printf("Forked\n");
-	    Close(listenfd);
-	    handle_request(connfd);
-	    exit(0);
-	}
-	Close(connfd);
+    	clilen = sizeof(cliaddr);
+    	connfd = Accept(listenfd, (SA *) &cliaddr, &clilen);
+    	printf("Accepted\n");
+    	
+    	if ( (childpid = Fork()) == 0) {
+    	    printf("Forked\n");
+    	    Close(listenfd);
+    	    handle_request(connfd);
+    	    exit(0);
+    	}
+    	Close(connfd);
     }
 }
 
@@ -43,16 +48,26 @@ void handle_request(int sockfd)
 {
     ssize_t n;
     char line[MAXLINE];
+    char *bill = "/bill";
 
+    // points line to what was read
     n = Readline(sockfd, line, MAXLINE);
     if (n == 0) {
-	    return;
+        return;
     }
     printf("Received %s\n", line);
+    // line format = "GET /bill HTTP/1.1"
 
-    printf("Sending %s\n", reply);
-    n = strlen(reply);
-    Writen(sockfd, reply, n);
+    // Send different replies based on line
+    if (strstr(line, bill)) {
+        printf("Sending %s\n", replyBill);
+        n = strlen(replyBill);
+        Writen(sockfd, replyBill, n);
+    } else {
+        printf("Sending %s\n", reply);
+        n = strlen(reply);
+        Writen(sockfd, reply, n);
+    }
 }
 
 
